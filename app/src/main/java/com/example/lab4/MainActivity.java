@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        textView = findViewById(R.id.textView);
+        textView.setText(" ");
+
     }
 
     //output progress of our "download" to Logcat
@@ -62,28 +65,24 @@ public class MainActivity extends AppCompatActivity {
         //mock "Download Progress" increases by 10% each second
         for (int downloadProgress = 0; downloadProgress <= 100; downloadProgress = downloadProgress + 10) {
             downloadProgressStatus = downloadProgress;
+            Log.d(TAG, "Download Progress:" + downloadProgress + "%");
             if(stopThread) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         startButton.setText("Start");
 
+                        textView.setText(downloadProgressStatus);
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 });
 
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(stopThread = false) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText("Download Progress: " + downloadProgressStatus + "%");
-                    }
-                });
             }
             else {
                 runOnUiThread(new Runnable() {
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
+        //M1-10 last working part - make code look like that if you want to start from scratch for M-11
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
