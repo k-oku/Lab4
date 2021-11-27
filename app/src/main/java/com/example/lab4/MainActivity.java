@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private Button stopButton;
     private volatile boolean stopThread = false;
     private TextView textView;
-    private int downloadProgressStatus;
+    private String downloadProgressStatus;
 
     public class ExampleRunnable implements Runnable {
         //nested runnable interface
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         textView = findViewById(R.id.textView);
-        textView.setText(" ");
+        textView.setText("no download in progress");
 
     }
 
@@ -59,26 +59,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 startButton.setText("Downloading...");
+
             }
         });
 
         //mock "Download Progress" increases by 10% each second
         for (int downloadProgress = 0; downloadProgress <= 100; downloadProgress = downloadProgress + 10) {
-            downloadProgressStatus = downloadProgress;
+            downloadProgressStatus = String.valueOf(downloadProgress);
             Log.d(TAG, "Download Progress:" + downloadProgress + "%");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText("Download Progress:" + downloadProgressStatus + "%");
+                }
+
+            });
+
+
             if(stopThread) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         startButton.setText("Start");
-
-                        textView.setText(downloadProgressStatus);
-
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
 
                     }
                 });
@@ -88,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        textView.setText(" ");
+                        textView.setText("no download in progress");
+
                     }
                 });
             }
