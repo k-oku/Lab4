@@ -67,11 +67,6 @@ public class MainActivity extends AppCompatActivity {
         for (int downloadProgress = 0; downloadProgress <= 100; downloadProgress = downloadProgress + 10) {
             downloadProgressStatus = String.valueOf(downloadProgress);
             Log.d(TAG, "Download Progress:" + downloadProgress + "%");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -80,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
             });
 
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             if(stopThread) {
                 runOnUiThread(new Runnable() {
